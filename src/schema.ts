@@ -1,8 +1,13 @@
 import { ApolloError, gql } from "apollo-server";
 import getRoomsQuery from "./resolvers/getRoomsQuery/getRoomsQuery";
 import generateNewRoomMutation from "./resolvers/generateNewRoomMutation/generateNewRoomMutation";
+import joinExisitingRoomMutation from "./resolvers/joinExisitingRoomMutation/joinExisitingRoomMutation";
 
-import { RoomT, generateNewRoomInputT } from "./serverTypes";
+import {
+  RoomT,
+  generateNewRoomInputT,
+  joinExisitingRoomInputT,
+} from "./serverTypes";
 import intialState, { playGroundTestState } from "./states";
 
 export const typeDefs = gql`
@@ -42,5 +47,11 @@ export const resolvers = {
     ): RoomT | ApolloError => {
       return generateNewRoomMutation(intialState, args);
     },
+  },
+  joinExisitngRoom: (
+    _: any,
+    args: joinExisitingRoomInputT
+  ): RoomT | ApolloError => {
+    return joinExisitingRoomMutation(intialState, args);
   },
 };

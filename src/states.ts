@@ -49,6 +49,69 @@ export const blemHostAlone: ServerStateT = {
     },
   ],
 };
+export const blemHostWithBarney: ServerStateT = {
+  rooms: [
+    {
+      roomid: "homeroom",
+      hostid: "homid",
+      users: [
+        {
+          name: "homie",
+          userid: "homid",
+          online: true,
+        },
+      ],
+    },
+    {
+      roomid: "321",
+      hostid: "todd_id",
+      users: [
+        {
+          name: "blem",
+          userid: "todd_id",
+          online: true,
+        },
+        {
+          name: "barney",
+          userid: "bart_id",
+          online: true,
+        },
+      ],
+    },
+  ],
+};
+export const bartInHomeRoomBlemHostAlone: ServerStateT = {
+  rooms: [
+    {
+      roomid: "homeroom",
+      hostid: "homid",
+      users: [
+        {
+          name: "homie",
+          userid: "homid",
+          online: true,
+        },
+        {
+          name: "bart",
+          userid: "bart_id",
+          online: false,
+        },
+      ],
+    },
+    {
+      roomid: "321",
+      hostid: "todd_id",
+      users: [
+        {
+          name: "blem",
+          userid: "todd_id",
+          online: true,
+        },
+      ],
+    },
+  ],
+};
+
 export const playGroundTestState: ServerStateT = {
   rooms: [
     {

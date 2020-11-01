@@ -23,3 +23,13 @@ export type generateNewRoomInputT = {
   name: string;
   roomid: string;
 };
+export type joinExisitingRoomInputT = {
+  userid: string;
+  name: string;
+  roomid: string;
+};
+export type leaveCurrentRoomInputT = {
+  userid: string;
+  name: string;
+  roomid: string;
+};

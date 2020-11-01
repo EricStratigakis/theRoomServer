@@ -1,5 +1,4 @@
 import generateNewRoomMutation from "./generateNewRoomMutation";
-import { ServerStateT } from "../../serverTypes";
 import initialState, { blemHostAlone, toddInHomeRoom } from "../../states";
 import { ApolloError } from "apollo-server";
 
