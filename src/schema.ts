@@ -1,7 +1,9 @@
 import { ApolloError, gql } from "apollo-server";
-import roomsQuery from "./resolvers/roomsQuery";
-import { RoomT } from "./serverTypes";
-import store from "./redux/store";
+import getRoomsQuery from "./resolvers/getRoomsQuery/getRoomsQuery";
+import generateNewRoomMutation from "./resolvers/generateNewRoomMutation/generateNewRoomMutation";
+
+import { RoomT, generateNewRoomInputT } from "./serverTypes";
+import intialState, { playGroundTestState } from "./states";
 
 export const typeDefs = gql`
   type User {
@@ -22,12 +24,23 @@ export const typeDefs = gql`
   type Query {
     getRooms: [Room!]
   }
+  type Mutation {
+    generateNewRoom(userid: ID!, name: String!, roomid: ID!): Room
+  }
 `;
 
 export const resolvers = {
   Query: {
     getRooms: (_: any, args: any): RoomT[] | ApolloError => {
-      return roomsQuery(store).rooms;
+      return getRoomsQuery(intialState);
+    },
+  },
+  Mutation: {
+    generateNewRoom: (
+      _: any,
+      args: generateNewRoomInputT
+    ): RoomT | ApolloError => {
+      return generateNewRoomMutation(intialState, args);
     },
   },
 };

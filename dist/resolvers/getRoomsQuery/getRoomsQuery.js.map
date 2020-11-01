@@ -1,0 +1,1 @@
+{"version":3,"file":"getRoomsQuery.js","sourceRoot":"","sources":["../../../src/resolvers/getRoomsQuery/getRoomsQuery.ts"],"names":[],"mappings":";;AAAA,iDAA4C;AAG5C,kBAAe,CAAC,KAAmB,EAAyB,EAAE;IAC5D,IAAI,KAAK,CAAC,KAAK,CAAC,MAAM,IAAI,CAAC,EAAE;QAC3B,OAAO,IAAI,2BAAW,CAAC,iBAAiB,CAAC,CAAC;KAC3C;IACD,OAAO,KAAK,CAAC,KAAK,CAAC;AACrB,CAAC,CAAC"}
