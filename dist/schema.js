@@ -7,6 +7,8 @@ exports.resolvers = exports.typeDefs = void 0;
 const apollo_server_1 = require("apollo-server");
 const getRoomsQuery_1 = __importDefault(require("./resolvers/getRoomsQuery/getRoomsQuery"));
 const generateNewRoomMutation_1 = __importDefault(require("./resolvers/generateNewRoomMutation/generateNewRoomMutation"));
+const joinExisitingRoomMutation_1 = __importDefault(require("./resolvers/joinExisitingRoomMutation/joinExisitingRoomMutation"));
+const leaveCurrentRoomMutation_1 = __importDefault(require("./resolvers/leaveCurrentRoomMutation/leaveCurrentRoomMutation"));
 const states_1 = __importDefault(require("./states"));
 exports.typeDefs = apollo_server_1.gql `
   type User {
@@ -14,13 +16,11 @@ exports.typeDefs = apollo_server_1.gql `
     name: String!
     online: Boolean!
   }
-
   type Room {
     roomid: ID!
     users: [User!]
     hostid: ID!
   }
-
   type ServerState {
     rooms: [Room!]
   }
@@ -29,6 +29,8 @@ exports.typeDefs = apollo_server_1.gql `
   }
   type Mutation {
     generateNewRoom(userid: ID!, name: String!, roomid: ID!): Room
+    joinExisitingRoom(userid: ID!, name: String!, roomid: ID!): Room
+    leaveCurrentRoom(userid: ID!, name: String!, roomid: ID!): Room
   }
 `;
 exports.resolvers = {
@@ -40,6 +42,12 @@ exports.resolvers = {
     Mutation: {
         generateNewRoom: (_, args) => {
             return generateNewRoomMutation_1.default(states_1.default, args);
+        },
+        joinExisitingRoom: (_, args) => {
+            return joinExisitingRoomMutation_1.default(states_1.default, args);
+        },
+        leaveCurrentRoom: (_, args) => {
+            return leaveCurrentRoomMutation_1.default(states_1.default, args);
         },
     },
 };

@@ -1,14 +1,16 @@
-import { ApolloError, gql } from "apollo-server";
+import { ApolloError, gql, PubSub, withFilter } from "apollo-server";
 import getRoomsQuery from "./resolvers/getRoomsQuery/getRoomsQuery";
 import generateNewRoomMutation from "./resolvers/generateNewRoomMutation/generateNewRoomMutation";
 import joinExisitingRoomMutation from "./resolvers/joinExisitingRoomMutation/joinExisitingRoomMutation";
-
+import leaveCurrentRoomMutation from "./resolvers/leaveCurrentRoomMutation/leaveCurrentRoomMutation";
 import {
   RoomT,
   generateNewRoomInputT,
   joinExisitingRoomInputT,
+  leaveCurrentRoomInputT,
 } from "./serverTypes";
 import intialState, { playGroundTestState } from "./states";
+import { pubsub } from "./index";
 
 export const typeDefs = gql`
   type User {
@@ -16,13 +18,11 @@ export const typeDefs = gql`
     name: String!
     online: Boolean!
   }
-
   type Room {
     roomid: ID!
     users: [User!]
     hostid: ID!
   }
-
   type ServerState {
     rooms: [Room!]
   }
@@ -31,6 +31,8 @@ export const typeDefs = gql`
   }
   type Mutation {
     generateNewRoom(userid: ID!, name: String!, roomid: ID!): Room
+    joinExisitingRoom(userid: ID!, name: String!, roomid: ID!): Room
+    leaveCurrentRoom(userid: ID!, name: String!, roomid: ID!): Room
   }
 `;
 
@@ -47,11 +49,17 @@ export const resolvers = {
     ): RoomT | ApolloError => {
       return generateNewRoomMutation(intialState, args);
     },
-  },
-  joinExisitngRoom: (
-    _: any,
-    args: joinExisitingRoomInputT
-  ): RoomT | ApolloError => {
-    return joinExisitingRoomMutation(intialState, args);
+    joinExisitingRoom: (
+      _: any,
+      args: joinExisitingRoomInputT
+    ): RoomT | ApolloError => {
+      return joinExisitingRoomMutation(intialState, args);
+    },
+    leaveCurrentRoom: (
+      _: any,
+      args: leaveCurrentRoomInputT
+    ): RoomT | ApolloError => {
+      return leaveCurrentRoomMutation(intialState, args);
+    },
   },
 };

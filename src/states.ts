@@ -1,4 +1,5 @@
 import { ServerStateT } from "./serverTypes";
+import { PubSub } from "apollo-server";
 
 export const blankState: ServerStateT = {
   rooms: [],
@@ -111,7 +112,49 @@ export const bartInHomeRoomBlemHostAlone: ServerStateT = {
     },
   ],
 };
-
+export const belmInHomeNoOtherRooms: ServerStateT = {
+  rooms: [
+    {
+      hostid: "homid",
+      roomid: "homeroom",
+      users: [
+        { userid: "homid", name: "homie", online: true },
+        { userid: "todd_id", name: "blem", online: true },
+      ],
+    },
+  ],
+};
+export const blemInHomeRoomWithBarneyHost: ServerStateT = {
+  rooms: [
+    {
+      roomid: "homeroom",
+      hostid: "homid",
+      users: [
+        {
+          name: "homie",
+          userid: "homid",
+          online: true,
+        },
+        {
+          name: "blem",
+          userid: "todd_id",
+          online: true,
+        },
+      ],
+    },
+    {
+      roomid: "321",
+      hostid: "bart_id",
+      users: [
+        {
+          name: "barney",
+          userid: "bart_id",
+          online: true,
+        },
+      ],
+    },
+  ],
+};
 export const playGroundTestState: ServerStateT = {
   rooms: [
     {
@@ -138,7 +181,6 @@ export const playGroundTestState: ServerStateT = {
     },
   ],
 };
-
 const initalState: ServerStateT = {
   rooms: [
     {
