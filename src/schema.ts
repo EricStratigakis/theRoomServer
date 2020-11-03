@@ -37,7 +37,7 @@ export const typeDefs = gql`
     room(roomid: ID!): Room
   }
 `;
-const pubsub = new PubSub()
+const pubsub = new PubSub();
 export const resolvers = {
   Query: {
     getRooms: (_: any, args: any): RoomT[] | ApolloError => {
@@ -49,30 +49,35 @@ export const resolvers = {
       _: any,
       args: generateNewRoomInputT
     ): RoomT | ApolloError => {
-      return generateNewRoomMutation(intialState, args);
+      let room = generateNewRoomMutation(intialState, args);
+      pubsub.publish("ROOM", { room });
+      return room;
     },
     joinExisitingRoom: (
       _: any,
       args: joinExisitingRoomInputT
     ): RoomT | ApolloError => {
-      return joinExisitingRoomMutation(intialState, args);
+      let room = joinExisitingRoomMutation(intialState, args);
+      pubsub.publish("ROOM", { room });
+      return room;
     },
     leaveCurrentRoom: (
       _: any,
       args: leaveCurrentRoomInputT
     ): RoomT | ApolloError => {
-      return leaveCurrentRoomMutation(intialState, args);
+      let room = leaveCurrentRoomMutation(intialState, args);
+      pubsub.publish("ROOM", { room });
+      return room;
     },
   },
   Subscription: {
     room: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator(['ROOM']),
+        () => pubsub.asyncIterator(["ROOM"]),
         (payload, args) => {
-          return payload.room.roomid === args.roomid
-        },
+          return payload.room.roomid === args.roomid;
+        }
       ),
-      resolve: (payload:RoomT) => (payload)
     },
-  }
+  },
 };

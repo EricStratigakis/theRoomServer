@@ -32,7 +32,11 @@ exports.typeDefs = apollo_server_1.gql `
     joinExisitingRoom(userid: ID!, name: String!, roomid: ID!): Room
     leaveCurrentRoom(userid: ID!, name: String!, roomid: ID!): Room
   }
+  type Subscription {
+    room(roomid: ID!): Room
+  }
 `;
+const pubsub = new apollo_server_1.PubSub();
 exports.resolvers = {
     Query: {
         getRooms: (_, args) => {
@@ -41,13 +45,26 @@ exports.resolvers = {
     },
     Mutation: {
         generateNewRoom: (_, args) => {
-            return generateNewRoomMutation_1.default(states_1.default, args);
+            let room = generateNewRoomMutation_1.default(states_1.default, args);
+            pubsub.publish("ROOM", { room });
+            return room;
         },
         joinExisitingRoom: (_, args) => {
-            return joinExisitingRoomMutation_1.default(states_1.default, args);
+            let room = joinExisitingRoomMutation_1.default(states_1.default, args);
+            pubsub.publish("ROOM", { room });
+            return room;
         },
         leaveCurrentRoom: (_, args) => {
-            return leaveCurrentRoomMutation_1.default(states_1.default, args);
+            let room = leaveCurrentRoomMutation_1.default(states_1.default, args);
+            pubsub.publish("ROOM", { room });
+            return room;
+        },
+    },
+    Subscription: {
+        room: {
+            subscribe: apollo_server_1.withFilter(() => pubsub.asyncIterator(["ROOM"]), (payload, args) => {
+                return payload.room.roomid === args.roomid;
+            }),
         },
     },
 };
