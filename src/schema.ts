@@ -10,7 +10,6 @@ import {
   leaveCurrentRoomInputT,
 } from "./serverTypes";
 import intialState, { playGroundTestState } from "./states";
-import { pubsub } from "./index";
 
 export const typeDefs = gql`
   type User {
@@ -34,8 +33,11 @@ export const typeDefs = gql`
     joinExisitingRoom(userid: ID!, name: String!, roomid: ID!): Room
     leaveCurrentRoom(userid: ID!, name: String!, roomid: ID!): Room
   }
+  type Subscription {
+    room(roomid: ID!): Room
+  }
 `;
-
+const pubsub = new PubSub()
 export const resolvers = {
   Query: {
     getRooms: (_: any, args: any): RoomT[] | ApolloError => {
@@ -62,4 +64,15 @@ export const resolvers = {
       return leaveCurrentRoomMutation(intialState, args);
     },
   },
+  Subscription: {
+    room: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(['ROOM']),
+        (payload, args) => {
+          return payload.room.roomid === args.roomid
+        },
+      ),
+      resolve: (payload:RoomT) => (payload)
+    },
+  }
 };
